@@ -191,9 +191,7 @@ class SubscriptionBuilder
     protected function getStripeCustomer($token = null, array $options = [])
     {
         if (! $this->user->stripe_id) {
-            $customer = $this->user->createAsStripeCustomer(
-                $token, array_merge($options, array_filter(['coupon' => $this->coupon]))
-            );
+            $customer = $this->user->createAsStripeCustomer($token, $options);
         } else {
             $customer = $this->user->asStripeCustomer();
 
@@ -215,6 +213,7 @@ class SubscriptionBuilder
         return array_filter([
             'plan' => $this->plan,
             'quantity' => $this->quantity,
+            'coupon' => $this->coupon,
             'trial_end' => $this->getTrialEndForPayload(),
             'tax_percent' => $this->getTaxPercentageForPayload(),
             'metadata' => $this->metadata,

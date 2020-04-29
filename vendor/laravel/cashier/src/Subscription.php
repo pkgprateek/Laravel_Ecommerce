@@ -45,7 +45,7 @@ class Subscription extends Model
      */
     public function user()
     {
-        $model = getenv('STRIPE_MODEL') ?: config('services.stripe.model');
+        $model = getenv('STRIPE_MODEL') ?: config('services.stripe.model', 'User');
 
         return $this->belongsTo($model, 'user_id');
     }
@@ -161,6 +161,8 @@ class Subscription extends Model
         $subscription = $this->asStripeSubscription();
 
         $subscription->quantity = $quantity;
+        
+        $subscription->prorate = $this->prorate;
 
         $subscription->save();
 
